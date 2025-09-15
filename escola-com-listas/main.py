@@ -3,6 +3,7 @@
     Relatório de crianças por atividade.
 
     - Imprime a lista de crianças agrupadas por sala que frequentam cada uma das atividades.
+    - Utilize os tipos de dados de Tuplas e Listas.
 """
 __version__ = "0.1.0"
 
