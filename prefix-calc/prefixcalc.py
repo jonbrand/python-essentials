@@ -19,15 +19,33 @@
     $ prefixcalc.py mul 5 2
     --> 10
 """
-___version__ = "0.1.0"
+___version__ = "0.1.1"
 __author__ = "Jonatas Brandão"
 __license__ = "Unlicense"
 
 import sys
 
-operation = sys.argv[1]
-n1 = int(sys.argv[2])
-n2 = int(sys.argv[3])
+arguments = sys.argv[1:]
+
+if not arguments:
+    operation = input("Digite a operação: ")
+    n1 = input("Digite n1: ")
+    n2 = input("Digite n2: ")
+    operations = [operation, n1, n2]
+elif len(arguments) != 3:
+    print("Argumentos inválidos!")
+    print("Exemplo correto: sum 5 5")
+    sys.exit(1)
+
+operation, *nums = arguments
+
+# TODO -> Validar Operações
+
+# TODO -> Validar números
+
+# operation = sys.argv[1]
+# n1 = int(sys.argv[2]) 
+# n2 = int(sys.argv[3])
 
 # Função de soma
 def sum(n1, n2):
@@ -49,6 +67,8 @@ def div(n1, n2):
     result = n1 / n2
     return result
 
+# TODO -> Integrar dicionário com operações
+
 operations = {
     "sum": sum,
     "sub": sub,
@@ -56,4 +76,6 @@ operations = {
     "div": div
 }
 
-print(operations[operation](n1, n2))
+# TODO -> Formatar resultado
+
+print(arguments)
