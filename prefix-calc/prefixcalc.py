@@ -19,7 +19,7 @@
     $ prefixcalc.py mul 5 2
     --> 10
 """
-___version__ = "0.1.1"
+___version__ = "0.1.2"
 __author__ = "Jonatas Brandão"
 __license__ = "Unlicense"
 
@@ -31,7 +31,7 @@ if not arguments:
     operation = input("Digite a operação: ")
     n1 = input("Digite n1: ")
     n2 = input("Digite n2: ")
-    operations = [operation, n1, n2]
+    arguments = [operation, n1, n2]
 elif len(arguments) != 3:
     print("Argumentos inválidos!")
     print("Exemplo correto: sum 5 5")
@@ -39,35 +39,42 @@ elif len(arguments) != 3:
 
 operation, *nums = arguments
 
-# TODO -> Validar Operações
+valid_operations = { "sum", "sub", "div", "mul" }
 
-# TODO -> Validar números
+if operation not in valid_operations:
+    print("Operação inválida!")
+    print(valid_operations)
+    sys.exit(1)
 
-# operation = sys.argv[1]
-# n1 = int(sys.argv[2]) 
-# n2 = int(sys.argv[3])
+valid_numbers = []
 
-# Função de soma
+for num in nums:
+    if not num.replace(".","").isdigit():
+        print("Número inválido {num}!")
+        sys.exit(1)
+    if "." in num:
+        num = float(num)
+    else:
+        num = int(num)
+    valid_numbers.append(num)
+
+n1, n2 = valid_numbers
+
 def sum(n1, n2):
     result = n1 + n2
     return result
 
-# Função de subtração
 def sub(n1, n2):
     result = n1 - n2
     return result
 
-# Função de multiplicação
 def mul(n1, n2):
     result = n1 * n2
     return result
 
-# Função de divisão
 def div(n1, n2):
     result = n1 / n2
     return result
-
-# TODO -> Integrar dicionário com operações
 
 operations = {
     "sum": sum,
@@ -76,6 +83,6 @@ operations = {
     "div": div
 }
 
-# TODO -> Formatar resultado
+result = operations[operation](n1, n2)
 
-print(arguments)
+print(f"O resultado é: {result}")
