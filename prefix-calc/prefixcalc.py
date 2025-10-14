@@ -24,6 +24,8 @@ __author__ = "Jonatas Brandão"
 __license__ = "Unlicense"
 
 import sys
+import os
+from datetime import datetime
 
 arguments = sys.argv[1:]
 
@@ -84,5 +86,13 @@ operations = {
 }
 
 result = operations[operation](n1, n2)
+path = os.curdir
+filepath = os.path.join(path, "prefixcalc.log")
+timestamp = datetime.today()
+user = os.getenv("USER", "Anonymous")
+
+with open(filepath, "a") as file_:
+    file_.write(f"{timestamp} - {user} - {operation} {n1} {n2} = {result}\n")
+
 
 print(f"O resultado é: {result}")
