@@ -13,7 +13,7 @@ Text Note...
 
 # Leitura de Notas
 
-$ notes.py read --tag=new-tag
+$ notes.py read new-tag
 ..
 ..
 
@@ -30,7 +30,6 @@ filepath = os.path.join(path, "notes.txt")
 
 arguments = sys.argv[1:]
 cmds = ("read", "new")
-subCmds = ("--tag")
 
 if not arguments:
     print(f"Invalid command usage!")
@@ -40,12 +39,22 @@ if arguments[0] not in cmds:
     print(f"Invalid command {arguments[0]}!")
 
 if arguments[0] == "read":
-    print("Deu certo!")
+    for line in open(filepath):
+        title, tag, text = line.split("\t")
+
+        if tag.lower() == arguments[1].lower():
+            print(f"title: {title}")
+            print(f"text: {text}")
         
 
 if arguments[0] == "new":
-    tag = input("tag:")
-    text = input("text:")
+    title = arguments[1] # TODO: Tratar exception
+    text = [
+        f"{title}",
+        input("tag:").strip(),
+        input("text:\n").strip(),
+        
+    ]
 
     with open(filepath, "a") as file_:
-        file_.write(f"tag: {tag}\n text:\n{text}\n")
+        file_.write("\t".join(text) + "\n")
