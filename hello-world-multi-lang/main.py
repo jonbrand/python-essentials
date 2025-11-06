@@ -21,7 +21,7 @@
   
 """
 # metadata
-__version__ = "0.1.3"
+__version__ = "0.1.4"
 __author__ = "Jonatas Brandão"
 __license__ = "Unlicense"
 
@@ -34,7 +34,16 @@ arguments = {
 }
 
 for args in sys.argv[1:]:
-    key, value = args.split("=")
+    try:
+        key, value = args.split("=")
+    except ValueError as e:
+        # TODO Logging
+        print(
+            f"[ERROR] {str(e)}!\nVocê utilizou `{args}` ao invés de `--key=value`\n"
+            f"Por favor, utilize o sinal de `=` para o melhor aproveitamento do comando!"
+        )
+        sys.exit(1)
+
     key = key.lstrip("-").strip()
     value = value.strip()
 
@@ -60,4 +69,9 @@ msg = {
     "es_SP": "¡Hola mundo!",
 }
 
-print(msg[current_language] * int(arguments["count"]))
+try:
+    message = msg[current_language]
+except KeyError as e:
+    print(f"Escolha uma opção de linguagem válida\nPor favor, escolha entre estas opções: {list(msg.keys())}")
+    sys.exit(1)
+print(message = int(arguments['count']))
