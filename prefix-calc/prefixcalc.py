@@ -86,13 +86,19 @@ operations = {
 }
 
 result = operations[operation](n1, n2)
+
+print(f"O resultado é: {result}")
+
 path = os.curdir
 filepath = os.path.join(path, "prefixcalc.log")
 timestamp = datetime.today()
 user = os.getenv("USER", "Anonymous")
 
-with open(filepath, "a") as file_:
-    file_.write(f"{timestamp} - {user} - {operation} {n1} {n2} = {result}\n")
 
+try:
+    with open(filepath, "a") as file_:
+        file_.write(f"{timestamp} - {user} - {operation} {n1} {n2} = {result}\n")
 
-print(f"O resultado é: {result}")
+except PermissionError as e:
+    # TODO logging
+    print(f"{str(e)} O arquivo não foi encontrado")

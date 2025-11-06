@@ -32,11 +32,11 @@ arguments = sys.argv[1:]
 cmds = ("read", "new")
 
 if not arguments:
-    print(f"Invalid command usage!")
+    print(f"Invalid command usage!\nPor favor, escolha um dos seguintes comandos: {list(cmds)}")
     sys.exit(1)
 
 if arguments[0] not in cmds:
-    print(f"Invalid command {arguments[0]}!")
+    print(f"Invalid command {arguments[0]}!\nPor favor, escolha um dos seguintes comandos: {list(cmds)}")
 
 if arguments[0] == "read":
     for line in open(filepath):
@@ -48,7 +48,13 @@ if arguments[0] == "read":
         
 
 if arguments[0] == "new":
-    title = arguments[1] # TODO: Tratar exception
+
+    try:
+        title = arguments[1]
+    except IndexError as e:
+        print(f"[ERROR] {str(e)}!\nPor favor, adicione um título ao arquivo neste formato 'file name'")
+        sys.exit(1)
+    
     text = [
         f"{title}",
         input("tag:").strip(),

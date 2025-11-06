@@ -72,6 +72,6 @@ msg = {
 try:
     message = msg[current_language]
 except KeyError as e:
-    print(f"Escolha uma opção de linguagem válida\nPor favor, escolha entre estas opções: {list(msg.keys())}")
+    print(f"[ERROR] {str(e)}!\nEscolha uma opção de linguagem válida!\nPor favor, escolha entre estas opções: {list(msg.keys())}")
     sys.exit(1)
 print(message = int(arguments['count']))
