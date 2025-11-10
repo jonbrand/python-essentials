@@ -27,6 +27,29 @@ __license__ = "Unlicense"
 
 import os
 import sys
+import logging
+from logging import handlers
+
+log_level = os.getenv("LOG_LEVEL", "WARNING").upper()
+
+log = logging.Logger("Jonatas", log_level)
+
+fileHandle = handlers.RotatingFileHandler(
+    "logs.log",
+    maxBytes=10**6,
+    backupCount=10
+)
+
+fileHandle.setLevel(log_level)
+
+fmt = logging.Formatter(
+    '%(asctime)s  %(name)s  %(levelname)s '
+    'l:%(lineno)d f:%(filename)s: %(message)s'
+)
+
+fileHandle.setFormatter(fmt)
+
+log.addHandler(fileHandle)
 
 arguments = {
     "lang": None,
@@ -37,10 +60,10 @@ for args in sys.argv[1:]:
     try:
         key, value = args.split("=")
     except ValueError as e:
-        # TODO Logging
-        print(
-            f"[ERROR] {str(e)}!\nVocê utilizou `{args}` ao invés de `--key=value`\n"
-            f"Por favor, utilize o sinal de `=` para o melhor aproveitamento do comando!"
+        log.error(
+            "Por favor, utilize o sinal de `=` para o melhor aproveitamento do comando!\nVocê utilizou %s ao invés de `--key=value` \n%s",
+            args,
+            str(e)
         )
         sys.exit(1)
 
@@ -72,6 +95,10 @@ msg = {
 try:
     message = msg[current_language]
 except KeyError as e:
-    print(f"[ERROR] {str(e)}!\nEscolha uma opção de linguagem válida!\nPor favor, escolha entre estas opções: {list(msg.keys())}")
+    log.error(
+        "Você Escolheu uma opção inválida: %s\nPor favor, escolha uma opção de linguagem válida: %s",
+        str(e),
+        list(msg.keys()),
+    )
     sys.exit(1)
-print(message = int(arguments['count']))
+print((message + "\n") * int(arguments['count']))
