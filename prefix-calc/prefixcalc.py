@@ -25,7 +25,30 @@ __license__ = "Unlicense"
 
 import sys
 import os
+import logging
 from datetime import datetime
+from logging import handlers
+
+log_level = os.getenv("LOG_LEVEL", "WARNING").upper()
+
+log = logging.Logger("Jonatas", log_level)
+
+fileHandle = handlers.RotatingFileHandler(
+    "logs.log",
+    maxBytes=10**6,
+    backupCount=10
+)
+
+fileHandle.setLevel(log_level)
+
+fmt = logging.Formatter(
+    '%(asctime)s  %(name)s  %(levelname)s '
+    'l:%(lineno)d f:%(filename)s: %(message)s'
+)
+
+fileHandle.setFormatter(fmt)
+
+log.addHandler(fileHandle)
 
 arguments = sys.argv[1:]
 
@@ -100,5 +123,7 @@ try:
         file_.write(f"{timestamp} - {user} - {operation} {n1} {n2} = {result}\n")
 
 except PermissionError as e:
-    # TODO logging
-    print(f"{str(e)} O arquivo não foi encontrado")
+    log.error(
+        "%s O arquivo não foi encontrado",
+        str(e)
+    )
