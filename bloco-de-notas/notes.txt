@@ -1,3 +1,4 @@
-Título	tech	text
-Nova nota	geral	texte
-title	tag	ola
+new-note	geral	Este teste está bom demais!
+China	Ols	cacsccscasc
+Lua	planetas	A Lua é bonita.
+Cloud	cloud	Text

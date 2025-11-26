@@ -31,6 +31,11 @@ filepath = os.path.join(path, "notes.txt")
 arguments = sys.argv[1:]
 cmds = ("read", "new")
 
+actions = {
+    "read": "ler",
+    "new": "criar"
+}
+
 if not arguments:
     print(f"Invalid command usage!\nPor favor, escolha um dos seguintes comandos: {list(cmds)}")
     sys.exit(1)
@@ -38,29 +43,43 @@ if not arguments:
 if arguments[0] not in cmds:
     print(f"Invalid command {arguments[0]}!\nPor favor, escolha um dos seguintes comandos: {list(cmds)}")
 
-if arguments[0] == "read":
-    for line in open(filepath):
-        title, tag, text = line.split("\t")
-
-        if tag.lower() == arguments[1].lower():
-            print(f"title: {title}")
-            print(f"text: {text}")
+while True:
+    if arguments[0] == "read":
+        try:
+            for line in open(filepath):
+                try:
+                    title, tag, text = line.split("\t")
+                    arg_tag = arguments[1].lower()
+                except IndexError as e:
+                    #TODO: Resolver problema de loop neste erro.
+                    arg_tag = input("Por Favor, digite uma tag para executar a busca: ").strip().lower()
+                if tag.lower() == arg_tag:
+                    print(f"title: {title}")
+                    print(f"text: {text}")
+        except FileNotFoundError as e:
+            print(f"[ERROR] {str(e)}!\nPor favor, crie uma nota utilizando o comando `new` antes de buscar.")
+        
         
 
-if arguments[0] == "new":
+    if arguments[0] == "new":
+        try:
+            title = arguments[1]
+        except IndexError :
+            title = input("Por favor, adicione um Título: ")
+        
+        text = [
+            f"{title}",
+            input("tag:").strip(),
+            input("text:\n").strip(),
+            
+        ]
 
-    try:
-        title = arguments[1]
-    except IndexError as e:
-        print(f"[ERROR] {str(e)}!\nPor favor, adicione um título ao arquivo neste formato 'file name'")
-        sys.exit(1)
+        with open(filepath, "a") as file_:
+            file_.write("\t".join(text) + "\n")
     
-    text = [
-        f"{title}",
-        input("tag:").strip(),
-        input("text:\n").strip(),
-        
-    ]
+    next_step = input(f"Você gostaria de {'criar' if arguments[0] == actions['new'] else actions['read']} mais uma nota? [Y/n]").strip().lower()
 
-    with open(filepath, "a") as file_:
-        file_.write("\t".join(text) + "\n")
+    if next_step != "y":
+        break
+    else:
+        continue
