@@ -50,67 +50,82 @@ fileHandle.setFormatter(fmt)
 
 log.addHandler(fileHandle)
 
-arguments = sys.argv[1:]
 
-if not arguments:
-    operation = input("Digite a operação: ")
-    n1 = input("Digite n1: ")
-    n2 = input("Digite n2: ")
-    arguments = [operation, n1, n2]
-elif len(arguments) != 3:
-    print("Argumentos inválidos!")
-    print("Exemplo correto: sum 5 5")
-    sys.exit(1)
+reset_calc = False
 
-operation, *nums = arguments
-
-valid_operations = { "sum", "sub", "div", "mul" }
-
-if operation not in valid_operations:
-    print("Operação inválida!")
-    print(valid_operations)
-    sys.exit(1)
-
-valid_numbers = []
-
-for num in nums:
-    if not num.replace(".","").isdigit():
-        print("Número inválido {num}!")
-        sys.exit(1)
-    if "." in num:
-        num = float(num)
+while True:
+    if reset_calc:
+        arguments = []
     else:
-        num = int(num)
-    valid_numbers.append(num)
+        arguments = sys.argv[1:]
 
-n1, n2 = valid_numbers
+    if not arguments:
+        operation = input("Digite a operação: ")
+        n1 = input("Digite n1: ")
+        n2 = input("Digite n2: ")
+        arguments = [operation, n1, n2]
+    elif len(arguments) != 3:
+        print("Argumentos inválidos!")
+        print("Exemplo correto: sum 5 5")
 
-def sum(n1, n2):
-    result = n1 + n2
-    return result
+    operation, *nums = arguments
 
-def sub(n1, n2):
-    result = n1 - n2
-    return result
+    valid_operations = { "sum", "sub", "div", "mul" }
 
-def mul(n1, n2):
-    result = n1 * n2
-    return result
+    if operation not in valid_operations:
+        print("Operação inválida!")
+        print(valid_operations)
+        sys.exit(1)
 
-def div(n1, n2):
-    result = n1 / n2
-    return result
+    valid_numbers = []
 
-operations = {
-    "sum": sum,
-    "sub": sub,
-    "mul": mul,
-    "div": div
-}
+    for num in nums:
+        if not num.replace(".","").isdigit():
+            print("Número inválido {num}!")
+            sys.exit(1)
+        if "." in num:
+            num = float(num)
+        else:
+            num = int(num)
+        valid_numbers.append(num)
 
-result = operations[operation](n1, n2)
+    n1, n2 = valid_numbers
 
-print(f"O resultado é: {result}")
+    def sum(n1, n2):
+        result = n1 + n2
+        return result
+
+    def sub(n1, n2):
+        result = n1 - n2
+        return result
+
+    def mul(n1, n2):
+        result = n1 * n2
+        return result
+
+    def div(n1, n2):
+        result = n1 / n2
+        return result
+
+    operations = {
+        "sum": sum,
+        "sub": sub,
+        "mul": mul,
+        "div": div
+    }
+
+    result = operations[operation](n1, n2)
+
+        
+    print(f"O resultado é: {result}")
+    next_step = input(f"Você gostaria de efetuar mais uma operação? [Y/n]").strip().lower()
+
+    if next_step != "y":
+        break
+    else:
+        reset_calc = True
+        continue
+
 
 path = os.curdir
 filepath = os.path.join(path, "prefixcalc.log")
