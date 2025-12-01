@@ -23,10 +23,31 @@ umidade: 90
 ... 
 "ALERTA!!! 🥵 Perigo calor extremo"
 """
+import os
 import sys
 import logging
+from logging import handlers
 
-log = logging.Logger("Alerta")
+log_level = os.getenv("LOG_LEVEL", "WARNING").upper()
+
+log = logging.Logger("Jonatas", log_level)
+
+fh = handlers.RotatingFileHandler(
+    "logs.log",
+    maxBytes=10**6,
+    backupCount=10
+)
+
+fh.setLevel(log_level)
+
+fmt = logging.Formatter(
+    '%(asctime)s  %(name)s  %(levelname)s '
+    'l:%(lineno)d f:%(filename)s: %(message)s'
+)
+
+fh.setFormatter(fmt)
+
+log.addHandler(fh)
 
 info = {
     "temperatura": None,
@@ -38,8 +59,9 @@ keys = info.keys()
 for key in keys:
     try:
         info[key] = float(input(f"Qual é a {key.title()}: ").strip())
-    except ValueError:
-        log.error(f"{key.title()} invalido!")
+    except ValueError as e:
+        log.error(f"{key.title()} invalida!")
+        print(f"[ERROR] {str(e)}!\nPor favor, digite um valor válido para a {key}: 10, 22.3, 25.0")
         sys.exit(1)
 
 temp = info["temperatura"]
