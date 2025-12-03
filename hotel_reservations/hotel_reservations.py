@@ -27,39 +27,57 @@ __license__ = "Unlicense"
 import os
 
 path = os.curdir
-room_file_path = os.path.join(path, "rooms.txt")
+room_filepath = os.path.join(path, "rooms.txt")
+reservation_filepath = os.path.join(path, "reservation.txt")
 
-rooms_available = [1,2,3,4]
-reservation = {}
+rooms_available = ()
+reservation = ()
 
 while True:
     user_name = input("Seja bem-vindo ao Hotel_Terminal!\n(Caso queira sair pressione enter para sair)\n\nQual é o seu nome?\n").strip()
     if user_name == "":
         break
 
+    try:
+        with open(reservation_filepath) as file_:
+            reservation = file_.read()
+            
+            # Verificar se reservation contém um valor em room
+        with open(room_filepath) as file_:
+            rooms_available = file_.read()
+
+            print (rooms_available)
+            print(reservation)
+
+    except PermissionError as e:
+        log.error(
+            "%s O arquivo não foi encontrado",
+            str(e)
+        )
+
+
     # TODO: Verificar os quartos disponíveis
     print("Quartos disponíveis:")
     print(*rooms_available, sep='\n')
     room_number = input("Selecione um número de quarto: ")
     days_reserved = input("Quantos dias você gostaria de reservar o quarto?: ")
-    reservation = {user_name, room_number, days_reserved}
+    reservation = (user_name, room_number, days_reserved)
     print(reservation)
+    
+
+    try:
+        with open(filepath, "a") as file_:
+            file_.write(f"{user_name},{room_number},{days_reserved}\n")
+
+    except PermissionError as e:
+        log.error(
+            "%s O arquivo não foi encontrado",
+            str(e)
+        )
+
     next_step = input("Gostaria de fazer mais alguma reserva? [Y,n]").strip()
     
     if next_step == "n":
         break
     else:
         continue
-
-path = os.curdir
-filepath = os.path.join(path, "reservation.txt")
-
-try:
-    with open(filepath, "a") as file_:
-        file_.write(f"{user_name},{room_number},{days_reserved}\n")
-
-except PermissionError as e:
-    log.error(
-        "%s O arquivo não foi encontrado",
-        str(e)
-    )
