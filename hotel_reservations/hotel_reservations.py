@@ -30,35 +30,32 @@ path = os.curdir
 room_filepath = os.path.join(path, "rooms.txt")
 reservation_filepath = os.path.join(path, "reservation.txt")
 
-rooms_available = ()
-reservation = ()
+rooms = {}
+reservation = {}
 
 while True:
     user_name = input("Seja bem-vindo ao Hotel_Terminal!\n(Caso queira sair pressione enter para sair)\n\nQual é o seu nome?\n").strip()
     if user_name == "":
         break
 
-    try:
-        with open(reservation_filepath) as file_:
-            reservation = file_.read()
-            
-            # Verificar se reservation contém um valor em room
-        with open(room_filepath) as file_:
-            rooms_available = file_.read()
+    with open(reservation_filepath) as file_:
+        for line in file_:
+          client, code, days_reserved = line.strip().split(',')
+          reservation[code] = {"Nome do Cliente", client, "Dias de Reserva", days_reserved}
 
-            print (rooms_available)
+    with open(room_filepath) as file_:
+      for line in file_:
+          code, room_name, price = line.strip().split(',')
+          rooms[code] = {"Nome da Suíte", room_name, "Preço", int(price)}
+    
+
+    # Como posso descobrir os qaurtos ocupados? Comparando reservation com room
+    for line in rooms:
+        if line == reservation[code]:
             print(reservation)
-
-    except PermissionError as e:
-        log.error(
-            "%s O arquivo não foi encontrado",
-            str(e)
-        )
-
 
     # TODO: Verificar os quartos disponíveis
     print("Quartos disponíveis:")
-    print(*rooms_available, sep='\n')
     room_number = input("Selecione um número de quarto: ")
     days_reserved = input("Quantos dias você gostaria de reservar o quarto?: ")
     reservation = (user_name, room_number, days_reserved)
