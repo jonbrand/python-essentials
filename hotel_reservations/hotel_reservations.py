@@ -50,12 +50,14 @@ while True:
     
 
     # Como posso descobrir os qaurtos ocupados? Comparando reservation com room
+    rooms_available = rooms.copy()
     for line in rooms:
-        if line == reservation[code]:
-            print(reservation)
+        if line in reservation:
+            rooms_available.pop(line)
 
-    # TODO: Verificar os quartos disponíveis
-    print("Quartos disponíveis:")
+
+    # TODO: Mudar formato de apresentação dos quartos disponíveis
+    print(f"Quartos disponíveis: {rooms_available.keys()}")
     room_number = input("Selecione um número de quarto: ")
     days_reserved = input("Quantos dias você gostaria de reservar o quarto?: ")
     reservation = (user_name, room_number, days_reserved)
@@ -63,7 +65,7 @@ while True:
     
 
     try:
-        with open(filepath, "a") as file_:
+        with open(reservation_filepath, "a") as file_:
             file_.write(f"{user_name},{room_number},{days_reserved}\n")
 
     except PermissionError as e:
