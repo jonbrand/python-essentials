@@ -38,18 +38,24 @@ while True:
     if user_name == "":
         break
 
-    with open(reservation_filepath) as file_:
-        for line in file_:
-          client, code, days_reserved = line.strip().split(',')
-          reservation[code] = {"Nome do Cliente", client, "Dias de Reserva", days_reserved}
+    try:
+        with open(reservation_filepath) as file_:
+            for line in file_:
+                client, code, days_reserved, booking_total = line.strip().split(',')
+                reservation[code] = {"Nome do Cliente", client, "Dias de Reserva", days_reserved, "Total da Reserva", booking_total}
+    except:
+        print("Arquivo vázio.")
 
-    with open(room_filepath) as file_:
-      for line in file_:
-          code, room_name, price = line.strip().split(',')
-          rooms[code] = {"Nome da Suíte", room_name, "Preço", int(price)}
+    try:
+        with open(room_filepath) as file_:
+            for line in file_:
+                code, room_name, price = line.strip().split(',')
+                rooms[code] = {"Nome da Suíte", room_name, "Preço", int(price)}
+    except:
+        print("Arquivo vázio.")
+
+    # TODO: Preciso extrair o preço do quarto em questão e passar  valor corretor para uma variável que vai ser utilizada no calculo do valor total da reserva.
     
-
-    # Como posso descobrir os qaurtos ocupados? Comparando reservation com room
     rooms_available = rooms.copy()
     for line in rooms:
         if line in reservation:
@@ -59,20 +65,28 @@ while True:
     # TODO: Mudar formato de apresentação dos quartos disponíveis
     print(f"Quartos disponíveis: {rooms_available.keys()}")
     room_number = input("Selecione um número de quarto: ")
-    days_reserved = input("Quantos dias você gostaria de reservar o quarto?: ")
-    reservation = (user_name, room_number, days_reserved)
+    days_reserved = input("Quantos dias você gostaria de reservar o quarto?: ").strip()
+    booking_total = int(price) * int(days_reserved)
+    reservation = (user_name, room_number, days_reserved, booking_total)
     print(reservation)
     
 
     try:
         with open(reservation_filepath, "a") as file_:
-            file_.write(f"{user_name},{room_number},{days_reserved}\n")
+            file_.write(f"{user_name},{room_number},{days_reserved},{booking_total}\n")
 
     except PermissionError as e:
         log.error(
             "%s O arquivo não foi encontrado",
             str(e)
         )
+
+    finish_booking = input(f"A reserva vai ficar no valor de {booking_total}, gostaria de finalizar a sua compra? [Y,n]").strip()
+
+    if finish_booking == "n":
+        break
+    else:
+        continue
 
     next_step = input("Gostaria de fazer mais alguma reserva? [Y,n]").strip()
     
