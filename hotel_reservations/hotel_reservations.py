@@ -50,6 +50,7 @@ while True:
                 client, code, days_reserved, booking_total = line.strip().split(',')
                 reservation[code] = {"Nome do Cliente": client, "Dias de Reserva": days_reserved, "Total da Reserva": booking_total}
     except:
+        # TODO: Tratar o erro de arquivo não encontrado
         print("Arquivo vázio.")
 
     # Tenta ler o arquivo contendo todos os quartos do hotel e outras informações 
@@ -74,6 +75,7 @@ while True:
     # Inputs do usuário
     # TODO: Mudar formato de apresentação dos quartos disponíveis
     print(f"Quartos disponíveis: {rooms_available.keys()}")
+    # TODO: Barrar a reserva de quartos quando todos estiverem ocupado
     room_number = input("Selecione um número de quarto: ")
     days_reserved = input("Quantos dias você gostaria de reservar o quarto?: ").strip()
     booking_total = int(rooms[room_number]["Preço"]) * int(days_reserved)
@@ -95,7 +97,7 @@ while True:
         break
     else:
 
-        next_step = input("Gostaria de fazer mais alguma reserva? [Y,n]").strip()
+        next_step = input("Gostaria de fazer mais alguma reserva? [Y,n]").strip().lower()
         
         if next_step == "n":
             break
